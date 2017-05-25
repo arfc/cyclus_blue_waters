@@ -23,6 +23,7 @@ PBS_SCRIPT = \
     #PBS -l walltime=%(walltime)s
     export CRAY_ROOTFS=UDI
     export LD_LIBRARY_PATH="/usr/lib/lapack:/usr/lib/libblas:$LD_LIBRARY_PATH"
+    export PYTHONPATH="/cyclus/build:$PYTHONPATH    "
     cd $PBS_O_WORKDIR
     aprun -n %(n)s -N %(N)s -d 1 -b cyclus_script.sh
     """
