@@ -28,6 +28,29 @@ PBS_SCRIPT = \
     aprun -n %(n)s -N %(N)s -d 1 -b cyclus_script.sh
     """
 
+def generate_inputs(spec_file, num_inp_files, in_dir=None):
+    """
+    Generates input files given a specification file
+    and places them in directory "./inputs"
+
+    Parameters
+    ----------
+
+    spec_file : string
+        Input specification file
+
+    num_inp_files : int
+        Number of input files to be generated
+
+    in_dir : string
+        Input directory
+
+    """
+    call("python3 -m rickshaw -i %s -n %s" % \
+            (spec_file, str(num_inp_files)), shell=True)
+    if in_dir:
+        call("mv *.json %s" % in_dir, shell=True)
+
 def render_cyclus_script(out_type="sqlite", in_dir=".", out_dir=".",
         log_dir="."):
     rendered_cyclus_script = dedent(CYCLUS_SCRIPT) % {"in_dir" : in_dir,
@@ -56,7 +79,7 @@ if __name__ == "__main__":
     parser.add_argument('--ppn', dest='ppn', type=int,
             help='Number of processors per node', default=1)
     parser.add_argument('--walltime', dest="walltime", type=str,
-            help='Wall time', default='00:01:00')
+            help='Wall time', default='00:10:00')
     parser.add_argument('-o', dest='out_type', type=str,
             help='Output type', choices=['sqlite', 'h5'],
             default='sqlite')
@@ -66,9 +89,12 @@ if __name__ == "__main__":
             help='Outputs directory', default='.')
     parser.add_argument('--log-dir', dest="log_dir", type=str,
             help='Logs directory', default='.')
-
+    parser.add_argument('--spec-file', dest="spec_file", type=str,
+            help='Specification file', default='')
 
     args = parser.parse_args()
+
+    generate_inputs(args.spec_file, args.nodes*args.ppn, args.in_dir)
 
     cyclus_script = render_cyclus_script(out_type=args.out_type,
             in_dir=args.in_dir, out_dir=args.out_dir, log_dir=args.log_dir)
