@@ -25,13 +25,13 @@ PBS_SCRIPT = \
     export LD_LIBRARY_PATH="/usr/lib/lapack:/usr/lib/libblas:$LD_LIBRARY_PATH"
     export PYTHONPATH="/cyclus/build:$PYTHONPATH"
     cd $PBS_O_WORKDIR
-    aprun -n %(n)s -N %(N)s -d 1 -b cyclus_script.sh
+    aprun -n %(n)s -N %(N)s -d 1 -b -- cyclus_script.sh
     """
 
 def generate_inputs(spec_file, num_inp_files, in_dir=None):
     """
     Generates input files given a specification file
-    and places them in directory "./inputs"
+    and places them in directory "in_dir"
 
     Parameters
     ----------
@@ -60,14 +60,16 @@ def render_cyclus_script(out_type="sqlite", in_dir=".", out_dir=".",
     return rendered_cyclus_script.strip()
 
 def render_pbs_script(nodes, ppn, walltime):
-    rendered_pbs_script = dedent(PBS_SCRIPT) % {"nodes" : str(nodes), "ppn" : str(ppn),
-            "walltime" : walltime, "n" : str(nodes*ppn), "N" : str(ppn)}
+    rendered_pbs_script = dedent(PBS_SCRIPT) % {"nodes" : str(nodes),
+            "ppn" : str(ppn), "walltime" : walltime, "n" : str(nodes*ppn),
+            "N" : str(ppn)}
 
     return rendered_pbs_script.strip()
 
 def write_to_files(cyclus_script, pbs_script):
     with open("cyclus_script.sh", "w+") as f:
         f.write(cyclus_script)
+    call("chmod +x cyclus_script.sh". shell=True)
 
     with open("pbs_script.pbs", "w+") as f:
         f.write(pbs_script)
