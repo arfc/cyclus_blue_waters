@@ -1,0 +1,14 @@
+#!/bin/bash
+#PBS -l gres=shifter
+#PBS -v UDI=adityapb/cycamore:bw
+#PBS -l nodes=1:ppn=1:xe
+#PBS -l walltime=00:10:00
+export CRAY_ROOTFS=UDI
+export LD_LIBRARY_PATH="/usr/lib/lapack:/usr/lib/libblas:$LD_LIBRARY_PATH"
+export PYTHONPATH="/cyclus/build:$PYTHONPATH"
+cd $PBS_O_WORKDIR
+start_time=`date +%s`
+aprun -n 1 -N 1 -d 1 -b -- cyclus_serial.sh
+end_time=`date +%s`
+echo Execution time: `expr $end_time - $start_time` s > time_serial.txt
+
