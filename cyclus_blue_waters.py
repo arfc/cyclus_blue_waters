@@ -72,7 +72,7 @@ def render_pbs_script(nodes, ppn, walltime):
 def write_to_files(cyclus_script, pbs_script):
     with open("cyclus_script.sh", "w+") as f:
         f.write(cyclus_script)
-    call("chmod +x cyclus_script.sh". shell=True)
+    call("chmod +x cyclus_script.sh", shell=True)
 
     with open("pbs_script.pbs", "w+") as f:
         f.write(pbs_script)
