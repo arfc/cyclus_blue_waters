@@ -25,9 +25,9 @@ PBS_SCRIPT = \
     export LD_LIBRARY_PATH="/usr/lib/lapack:/usr/lib/libblas:$LD_LIBRARY_PATH"
     export PYTHONPATH="/cyclus/build:$PYTHONPATH"
     cd $PBS_O_WORKDIR
-    start_time=`date +%s`
+    start_time=`date +%%s`
     aprun -n %(n)s -N %(N)s -d 1 -b -- cyclus_script.sh
-    end_time=`date +%s`
+    end_time=`date +%%s`
     echo Execution time: `expr $end_time - $start_time` s > time.txt
     """
 
