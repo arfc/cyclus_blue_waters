@@ -9,7 +9,7 @@ from textwrap import dedent
 CYCLUS_SCRIPT = \
     """
     #!/bin/bash
-    cyclus $ALPS_APP_PE.json -o \
+    cyclus %(in_dir)s/$ALPS_APP_PE.json -o \
             %(out_dir)s/$ALPS_APP_PE.%(out_type)s \
             > %(log_dir)s/out_$ALPS_APP_PE.log
     """
@@ -25,7 +25,8 @@ PBS_SCRIPT = \
     export LD_LIBRARY_PATH="/usr/lib/lapack:/usr/lib/libblas:$LD_LIBRARY_PATH"
     export PYTHONPATH="/cyclus/build:$PYTHONPATH"
     cd $PBS_O_WORKDIR
-    aprun -n 1 -N 1 -d 1 -b -- rickshaw -i %(spec_file)s -n %(n)s
+    aprun -n 1 -N 1 -d 1 -b -- /usr/local/bin/rickshaw -i %(spec_file)s -n %(n)s
+    mv *.json %(in_dir)s
     start_time=`date +%%s`
     aprun -n %(n)s -N %(N)s -d 1 -b -- cyclus_script.sh
     end_time=`date +%%s`
@@ -35,15 +36,15 @@ PBS_SCRIPT = \
 def render_cyclus_script(out_type="sqlite", in_dir=".", out_dir=".",
         log_dir="."):
     rendered_cyclus_script = dedent(CYCLUS_SCRIPT) % {
-            "out_dir" : out_dir, "out_type" : out_type,
+            "in_dir" : in_dir, "out_dir" : out_dir, "out_type" : out_type,
             "log_dir" : log_dir}
 
     return rendered_cyclus_script.strip()
 
-def render_pbs_script(nodes, ppn, walltime, spec_file):
+def render_pbs_script(nodes, ppn, walltime, spec_file, in_dir):
     rendered_pbs_script = dedent(PBS_SCRIPT) % {"nodes" : str(nodes),
             "ppn" : str(ppn), "walltime" : walltime, "n" : str(nodes*ppn),
-            "N" : str(ppn), "spec_file" : spec_file}
+            "N" : str(ppn), "spec_file" : spec_file, "in_dir" : in_dir}
 
     return rendered_pbs_script.strip()
 
@@ -81,7 +82,7 @@ if __name__ == "__main__":
             in_dir=args.in_dir, out_dir=args.out_dir, log_dir=args.log_dir)
 
     pbs_script = render_pbs_script(args.nodes, args.ppn, args.walltime,
-            args.spec_file)
+            args.spec_file, args.in_dir)
 
     write_to_files(cyclus_script, pbs_script)
 
