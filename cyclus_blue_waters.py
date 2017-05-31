@@ -35,6 +35,26 @@ PBS_SCRIPT = \
 
 def render_cyclus_script(out_type="sqlite", in_dir=".", out_dir=".",
         log_dir="."):
+    """
+    Renders the cyclus execution script
+
+    Parameters
+    ----------
+    out_type : str
+        Output type ('sqlite' or 'h5')
+    in_dir : str
+        Inputs directory
+    out_dir : str
+        Outputs directory
+    log_dir : str
+        Logs directory
+
+    Returns
+    -------
+    str
+        Rendered cyclus execution script
+
+    """
     rendered_cyclus_script = dedent(CYCLUS_SCRIPT) % {
             "in_dir" : in_dir, "out_dir" : out_dir, "out_type" : out_type,
             "log_dir" : log_dir}
@@ -42,6 +62,29 @@ def render_cyclus_script(out_type="sqlite", in_dir=".", out_dir=".",
     return rendered_cyclus_script.strip()
 
 def render_pbs_script(nodes, ppn, walltime, spec_file, in_dir):
+    """
+    Renders the PBS script
+
+    Parameters
+    ----------
+    nodes : int
+        Number of nodes
+    ppn : int
+        Number of processors per node
+    walltime : str
+        Wall time
+    spec_file : str
+        Specification file
+    in_dir : str
+        Inputs directory
+
+    Returns
+    -------
+    str
+        Rendered PBS script
+
+    """
+
     rendered_pbs_script = dedent(PBS_SCRIPT) % {"nodes" : str(nodes),
             "ppn" : str(ppn), "walltime" : walltime, "n" : str(nodes*ppn),
             "N" : str(ppn), "spec_file" : spec_file, "in_dir" : in_dir}
@@ -49,6 +92,17 @@ def render_pbs_script(nodes, ppn, walltime, spec_file, in_dir):
     return rendered_pbs_script.strip()
 
 def write_to_files(cyclus_script, pbs_script):
+    """
+    Writes PBS script and execution script to corresponding files
+
+    Parameters
+    ----------
+    cyclus_script : str
+        Cyclus execution script
+    pbs_script : str
+        PBS script
+
+    """
     with open("cyclus_script.sh", "w+") as f:
         f.write(cyclus_script)
     call("chmod +x cyclus_script.sh", shell=True)
