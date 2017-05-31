@@ -11,8 +11,31 @@ Running Cyclus on Blue Waters
         $ getDockerImage lookup <REPO_NAME>
         $ getDockerImage pull <REPO_NAME>
 
-2. Run the `cyclus_blue_water.py` script with appropriate options (`--help` for help).
-   This will generate two files, cyclus_script.sh and pbs_script.pbs.
+2. Run the `cyclus_blue_water.py` script with appropriate options.
+   This will generate two files, `cyclus_script.sh` and `pbs_script.pbs`.
+
+   .. table::
+
+    +----------------+-------------------------------+
+    |``-h, --help``  |Show help message              |
+    +----------------+-------------------------------+
+    |``--nodes``     |Number of nodes                |
+    +----------------+-------------------------------+
+    |``--ppn``       |Processors per node            |
+    +----------------+-------------------------------+
+    |``--walltime``  |Wall time                      |
+    +----------------+-------------------------------+
+    |``-o``          |Output type ('sqlite' or 'h5') |
+    +----------------+-------------------------------+
+    |``--in-dir``    |Inputs directory               |
+    +----------------+-------------------------------+
+    |``--out-dir``   |Outputs directory              |
+    +----------------+-------------------------------+
+    |``--log-dir``   |Logs directory                 |
+    +----------------+-------------------------------+
+    |``--spec-file`` |Specification file             |
+    +----------------+-------------------------------+
+
 
 3. Submit the job.
 
