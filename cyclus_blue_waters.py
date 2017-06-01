@@ -18,7 +18,7 @@ PBS_SCRIPT = \
     """
     #!/bin/bash
     #PBS -l gres=shifter
-    #PBS -v UDI=adityapb/rickshaw:bw
+    #PBS -v UDI=arfc/cyclus_blue_waters:latest
     #PBS -l nodes=%(nodes)s:ppn=%(ppn)s:xe
     #PBS -l walltime=%(walltime)s
     export CRAY_ROOTFS=UDI
