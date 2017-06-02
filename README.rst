@@ -1,6 +1,11 @@
 Running Cyclus on Blue Waters
 =============================
 
+Imagine you have a cyclus simulation that you would like to run many times
+with varied parameters or agents. You can use this workflow to generate 
+an input file for each desired simulation and to run those input files 
+simultaneously on the Blue Waters supercomputer.
+
 1. Login to a MOM node.
 
    .. code-block:: bash
@@ -25,26 +30,28 @@ Running Cyclus on Blue Waters
 
    .. table::
 
-    +----------------+-------------------------------+
-    |``-h, --help``  |Show help message              |
-    +----------------+-------------------------------+
-    |``--nodes``     |Number of nodes                |
-    +----------------+-------------------------------+
-    |``--ppn``       |Processors per node            |
-    +----------------+-------------------------------+
-    |``--walltime``  |Wall time                      |
-    +----------------+-------------------------------+
-    |``-o``          |Output type ('sqlite' or 'h5') |
-    +----------------+-------------------------------+
-    |``--in-dir``    |Inputs directory               |
-    +----------------+-------------------------------+
-    |``--out-dir``   |Outputs directory              |
-    +----------------+-------------------------------+
-    |``--log-dir``   |Logs directory                 |
-    +----------------+-------------------------------+
-    |``--spec-file`` |Path of specification file     |
-    +----------------+-------------------------------+
+    +----------------+--------------------------------------------------+
+    |``-h, --help``  |Show help message                                 |
+    +----------------+--------------------------------------------------+
+    |``--nodes``     |Number of nodes                                   |
+    +----------------+--------------------------------------------------+
+    |``--ppn``       |Processors per node                               |
+    +----------------+--------------------------------------------------+
+    |``--walltime``  |Max time your job can run (hours:minutes:seconds) |
+    +----------------+--------------------------------------------------+
+    |``-o``          |Output type ('sqlite' or 'h5')                    |
+    +----------------+--------------------------------------------------+
+    |``--in-dir``    |Inputs directory                                  |
+    +----------------+--------------------------------------------------+
+    |``--out-dir``   |Outputs directory                                 |
+    +----------------+--------------------------------------------------+
+    |``--log-dir``   |Logs directory                                    |
+    +----------------+--------------------------------------------------+
+    |``--spec-file`` |Path of specification file*                       |
+    +----------------+--------------------------------------------------+
 
+   *\* Specification files are Rickshaw input files in which you can define
+   constraints for generation*
 
 4. Submit the job.
 
@@ -55,33 +62,15 @@ Running Cyclus on Blue Waters
 Updating the docker image
 =========================
 
-1. Go to repository's home directory and run the following command to build
-   the docker image,
+The docker image needs to be updated if the cyclus or cycamore installation
+in the image is to be updated.
 
-   .. code-block:: bash
+The docker image will be automatically updated in docker hub when a commit is 
+pushed to cyclus or cycamore.
 
-        $ sudo docker build .
+As rickshaw doesn't have an automated build, to update the rickshaw installation
+in the docker image, the image needs to be manually updated.
 
-   The last line of output will be as follows,
-
-   Successfully built ``<IMAGE_ID>``
-
-2. Login to docker hub from command line,
-
-   .. code-block:: bash
-
-        $ sudo docker login --username=<USERNAME> --email=<EMAIL>
-
-3. Tag the image using the following command,
-
-   .. code-block:: bash
-
-        $ sudo docker tag <IMAGE_ID> arfc/cyclus_blue_waters:latest
-
-4. Push to docker hub, 
-
-   .. code-block:: bash
-
-        $ sudo docker push arfc/cyclus_blue_waters
-
+To manually update the image, go to the docker hub `page <https://hub.docker.com/r/arfc/cyclus_blue_waters/>`_, 
+then go to *Build Settings* and trigger a build.
 
