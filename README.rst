@@ -25,7 +25,7 @@ simultaneously on the Blue Waters supercomputer.
 
         $ getDockerImage pull arfc/cyclus_blue_waters:latest
 
-3. Run the `cyclus_blue_water.py` script with appropriate options.
+3. Run the `cyclus_blue_waters.py` script with appropriate options.
    This will generate two files, `cyclus_script.sh` and `pbs_script.pbs`.
 
    .. table::
