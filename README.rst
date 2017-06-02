@@ -62,8 +62,8 @@ simultaneously on the Blue Waters supercomputer.
 Updating the docker image
 =========================
 
-The docker image needs to be updated if the cyclus or cycamore installation
-in the image is to be updated.
+The docker image needs to be updated if the cyclus, cycamore or rickshaw 
+installation in the image is to be updated.
 
 The docker image will be automatically updated in docker hub when a commit is 
 pushed to cyclus or cycamore.
